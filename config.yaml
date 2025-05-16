@@ -1,16 +1,29 @@
 # Dataset generation configuration
 
 output_folder: "./data/output"
-input_folder: "./data/input"
+input_folder: ".data/input"
 chunk_sizes_seconds: 5
 sample_rate: 48000
 
-dataset_length_goal_minutes: 60*100 #100 hours
-target_lufs: -20
+dataset_length_goal_minutes: 60
 validation_data_percentage: 0.3
+
+eq_randomness: 0.7
 
 augmentations:
   - eq_high_cut
+  - eq_high_boost
   - eq_low_cut
+  - eq_low_boost
   - eq_mid_boost
-  - hard_compression
+  - eq_mid_cut
+  - eq_high_and_low_cut
+  - eq_high_and_low_boost
+  - eq_high_and_mid_boost
+  - eq_low_and_mid_boost
+  - eq_high_and_mid_cut
+  - eq_low_and_mid_cut
+  - no_change
+  # - hard_compression
+  # - low_compression
+  # - medium_compression
