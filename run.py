@@ -145,14 +145,30 @@ class DatasetGenerator:
             sf.write(src_path, src, self.sample_rate)
             print(f"Wrote: {target_path} and {src_path}")
         print("Dataset generation complete.")
-        # Write manifest of all src/target pairs
-        manifest_path = os.path.join(self.output_folder, "manifest.txt")
-        with open(manifest_path, "w") as mf:
+        # Split into train and validation sets and write .scp files with full paths
+        val_pct = getattr(self, "validation_data_percentage", 0.3)
+        val_count = int(len(all_chunks) * val_pct)
+        indices = list(range(len(all_chunks)))
+        random.shuffle(indices)
+        train_indices = set(indices[val_count:])
+
+        train_scp_path = os.path.join(self.output_folder, "train.scp")
+        validate_scp_path = os.path.join(self.output_folder, "validate.scp")
+
+        def full_path(idx, suffix):
+            return os.path.abspath(os.path.join(self.output_folder, f"{idx:04d}_{suffix}.wav"))
+
+        with open(train_scp_path, "w") as train_f, open(validate_scp_path, "w") as val_f:
             for idx in range(len(all_chunks)):
-                src = f"{idx:04d}_src.wav"
-                target = f"{idx:04d}_target.wav"
-                mf.write(f"{src} {target}\n")
-        print(f"Manifest written to {manifest_path}")
+                src = full_path(idx, "src")
+                target = full_path(idx, "target")
+                line = f"{src} {target}\n"
+                if idx in train_indices:
+                    train_f.write(line)
+                else:
+                    val_f.write(line)
+        print(f"Train SCP written to {train_scp_path}")
+        print(f"Validation SCP written to {validate_scp_path}")
 
 
 if __name__ == "__main__":

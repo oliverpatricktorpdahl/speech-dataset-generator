@@ -2,11 +2,12 @@
 
 output_folder: "./data/output"
 input_folder: "./data/input"
-chunk_sizes_seconds: 30
+chunk_sizes_seconds: 5
 sample_rate: 48000
 
-dataset_length_goal_minutes: 60
+dataset_length_goal_minutes: 60*100 #100 hours
 target_lufs: -20
+validation_data_percentage: 0.3
 
 augmentations:
   - eq_high_cut
