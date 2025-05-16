@@ -1,0 +1,15 @@
+# Dataset generation configuration
+
+output_folder: "./data/output"
+input_folder: "./data/input"
+chunk_sizes_seconds: 30
+sample_rate: 48000
+
+dataset_length_goal_minutes: 60
+target_lufs: -20
+
+augmentations:
+  - eq_high_cut
+  - eq_low_cut
+  - eq_mid_boost
+  - hard_compression
